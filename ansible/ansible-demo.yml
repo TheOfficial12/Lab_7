@@ -1,0 +1,49 @@
+- name: A sample playbook header
+  hosts: localhost
+  user: ubuntu
+  become: yes
+
+  vars:
+   myPath: /home/ubuntu/
+
+  tasks:
+
+    - name: Update Package Manager
+      apt:
+        update_cache: yes
+
+    - name: Install an application
+      apt:
+        update_cache: yes
+        name: default-jdk
+
+    - name: Remove an application
+      apt:
+        update_cache: yes
+        name: default-jdk
+        state: absent
+
+    - name: Install an application
+      apt:
+        name={{ item }}
+      with_items:
+        - libssl-dev
+        - libffi-dev
+        - python3
+        - python3-pip
+
+    - name: Create an empty file using Ansible
+      shell:
+        cmd: touch "{{ myPath }}test_file.txt"
+
+    - name: Change file ownership
+      file:
+        path: ../test_file.txt
+        owner: ubuntu
+        group: ubuntu
+        mode: '777'
+
+    - name: Copy a file in Ansible
+      copy:
+        src: /home/ubuntu/test_file.txt
+        dest: "{{ myPath }}test_file_2.txt"
